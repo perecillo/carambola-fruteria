@@ -1,0 +1,22 @@
+{
+  "name": "fruteria",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/vision": "^2.1.2",
+    "actions-on-google": "^2.13.0",
+    "body-parser": "^1.19.0",
+    "dialogflow": "^1.2.0",
+    "dialogflow-fulfillment": "^0.6.1",
+    "firebase-admin": "^9.1.1",
+    "firebase-functions": "^3.11.0",
+    "google-spreadsheet": "^3.0.13",
+    "node-telegram-bot-api": "^0.50.0"
+  }
+}
