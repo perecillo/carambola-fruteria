@@ -21,6 +21,9 @@ process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
 
 // Routes
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
+  if(request.body.queryResult.sentimentAnalysisResult){
+    puntuacion_sentimiento = request.body.queryResult.sentimentAnalysisResult.queryTextSentiment.score;
+  }
   const agent = new WebhookClient({ request, response }); 
   console.log("session: "+agent.session)
   const sessionId = agent.session.split('/')[agent.session.split('/').length-1];  
@@ -72,12 +75,21 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
    agent.add(agent.consoleMessages);
   }
 
+  function recogeEncuesta (agent) {
+  	if(puntuacion_sentimiento<=0){
+      agent.add('Sentimos que hayas tenido dificultades con el pedido. Nos ponemos a mejorar para que la próxima vez sea perfecto. Buen día!');
+    } else {
+      agent.add('No alegramos que así sea. Gracias a tus comentarios podemos mejorar. Esperamos que te guste la fruta!');
+    }
+  }
+
   let intentMap = new Map();
   intentMap.set('Pedido - Productos', anotaProductos);
   intentMap.set('Pedido - Productos - Resumen', confirmaProductos)
   intentMap.set('Pedido - Productos - Resumen - Envio a domicilio', anotaEnvioDomicilio)
   intentMap.set('Pedido - Productos - Resumen - Envio a domicilio - Datos de envio', anotaDatosdeEnvio)
   intentMap.set('Pedido - Productos - Resumen - Envio a domicilio - Datos de envio - yes', anotaConfirmado)
+  intentMap.set('Pedido - Productos - Resumen - Envio a domicilio - Datos de envio - yes - Encuesta', recogeEncuesta)
   agent.handleRequest(intentMap);
   
 });
